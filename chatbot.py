@@ -1,35 +1,60 @@
 import streamlit as st
 
 # Function to generate responses based on user input
-def get_health_response(user_input):
+def get_heart_health_response(user_input):
     user_input = user_input.lower()
     
     if "symptoms" in user_input:
-        return "Common symptoms include fever, cough, fatigue, and shortness of breath. Please consult a healthcare professional for more information."
-    elif "headache" in user_input:
-        return "Headaches can be caused by stress, dehydration, or tension. It's best to rest and stay hydrated. If it persists, see a doctor."
-    elif "fever" in user_input:
-        return "A fever is a common sign of infection. Monitor your temperature and consult a doctor if it exceeds 101°F (38.3°C) or lasts longer than three days."
-    elif "cold" in user_input or "flu" in user_input:
-        return "Rest, drink plenty of fluids, and consider over-the-counter medication. If symptoms worsen, seek medical advice."
+        return ("Common symptoms of heart problems include:\n"
+                "- Chest pain or discomfort\n"
+                "- Shortness of breath\n"
+                "- Dizziness or lightheadedness\n"
+                "- Fatigue\n"
+                "If you experience these, please consult a healthcare professional immediately.")
+    
+    elif "treatment" in user_input:
+        return ("Treatment options for heart problems may include:\n"
+                "- Medications (e.g., beta-blockers, ACE inhibitors)\n"
+                "- Lifestyle changes (diet, exercise)\n"
+                "- Surgical procedures (e.g., angioplasty, bypass surgery)\n"
+                "Consult your doctor for a personalized treatment plan.")
+    
     elif "exercise" in user_input:
-        return "Regular exercise can improve your overall health. Aim for at least 150 minutes of moderate aerobic activity each week."
+        return ("Recommended exercises for heart health include:\n"
+                "- Walking: Aim for at least 30 minutes a day.\n"
+                "- Cycling: A great way to improve cardiovascular fitness.\n"
+                "- Swimming: Low-impact exercise that's easy on the joints.\n"
+                "- Strength training: Incorporate this 2 days a week.\n"
+                "Always consult with your healthcare provider before starting a new exercise program.")
+    
     elif "diet" in user_input:
-        return "A balanced diet includes fruits, vegetables, whole grains, lean proteins, and healthy fats. Limit processed foods and sugars."
-    elif "mental health" in user_input:
-        return "It's important to take care of your mental health. Consider talking to a mental health professional if you're feeling overwhelmed."
+        return ("Heart-healthy dietary recommendations include:\n"
+                "- Eat plenty of fruits and vegetables.\n"
+                "- Choose whole grains over refined grains.\n"
+                "- Limit saturated fats and trans fats.\n"
+                "- Reduce sodium intake.\n"
+                "- Include lean proteins such as fish and legumes.")
+    
+    elif "stress" in user_input:
+        return ("Managing stress is crucial for heart health. Here are some tips:\n"
+                "- Practice mindfulness or meditation.\n"
+                "- Engage in physical activity.\n"
+                "- Ensure adequate sleep.\n"
+                "- Connect with friends and family for support.")
+    
     elif "bye" in user_input:
-        return "Goodbye! Stay healthy and take care."
+        return "Goodbye! Stay healthy and take care of your heart."
+    
     else:
-        return "I'm not sure how to respond to that. Please ask about symptoms, exercise, diet, or mental health."
+        return "I'm not sure how to respond to that. Please ask about symptoms, treatment, exercise, or diet related to heart health."
 
 # Streamlit app
-st.title("🏥 Healthcare Chatbot")
+st.title("❤️ Heart Health Chatbot")
 
 # User input
 user_input = st.text_input("You: ", "")
 
 # Generate response
 if user_input:
-    response = get_health_response(user_input)
+    response = get_heart_health_response(user_input)
     st.write(f"Chatbot: {response}")
