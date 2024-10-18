@@ -1,60 +1,39 @@
-import streamlit as st
+# app.py
 
-# Function to generate responses based on user input
-def get_heart_health_response(user_input):
-    user_input = user_input.lower()
+import streamlit as st
+from transformers import T5Tokenizer, T5ForConditionalGeneration
+import torch
+
+# Load the FLAN-T5 model and tokenizer
+model_name = "google/flan-t5-small"
+tokenizer = T5Tokenizer.from_pretrained(model_name)
+model = T5ForConditionalGeneration.from_pretrained(model_name)
+
+# Function to generate a response from the model
+def generate_response(prompt):
+    # Encode the input prompt
+    input_ids = tokenizer.encode(prompt, return_tensors="pt")
     
-    if "symptoms" in user_input:
-        return ("Common symptoms of heart problems include:\n"
-                "- Chest pain or discomfort\n"
-                "- Shortness of breath\n"
-                "- Dizziness or lightheadedness\n"
-                "- Fatigue\n"
-                "If you experience these, please consult a healthcare professional immediately.")
+    # Generate a response
+    output = model.generate(input_ids, max_length=150, num_return_sequences=1, truncation=True)
     
-    elif "treatment" in user_input:
-        return ("Treatment options for heart problems may include:\n"
-                "- Medications (e.g., beta-blockers, ACE inhibitors)\n"
-                "- Lifestyle changes (diet, exercise)\n"
-                "- Surgical procedures (e.g., angioplasty, bypass surgery)\n"
-                "Consult your doctor for a personalized treatment plan.")
-    
-    elif "exercise" in user_input:
-        return ("Recommended exercises for heart health include:\n"
-                "- Walking: Aim for at least 30 minutes a day.\n"
-                "- Cycling: A great way to improve cardiovascular fitness.\n"
-                "- Swimming: Low-impact exercise that's easy on the joints.\n"
-                "- Strength training: Incorporate this 2 days a week.\n"
-                "Always consult with your healthcare provider before starting a new exercise program.")
-    
-    elif "diet" in user_input:
-        return ("Heart-healthy dietary recommendations include:\n"
-                "- Eat plenty of fruits and vegetables.\n"
-                "- Choose whole grains over refined grains.\n"
-                "- Limit saturated fats and trans fats.\n"
-                "- Reduce sodium intake.\n"
-                "- Include lean proteins such as fish and legumes.")
-    
-    elif "stress" in user_input:
-        return ("Managing stress is crucial for heart health. Here are some tips:\n"
-                "- Practice mindfulness or meditation.\n"
-                "- Engage in physical activity.\n"
-                "- Ensure adequate sleep.\n"
-                "- Connect with friends and family for support.")
-    
-    elif "bye" in user_input:
-        return "Goodbye! Stay healthy and take care of your heart."
-    
-    else:
-        return "I'm not sure how to respond to that. Please ask about symptoms, treatment, exercise, or diet related to heart health."
+    # Decode the generated response
+    response = tokenizer.decode(output[0], skip_special_tokens=True)
+    return response
 
 # Streamlit app
-st.title("❤️ Heart Health Chatbot")
+st.title("AI Chatbot")
+st.subheader("Ask me anything about Artificial Intelligence!")
 
 # User input
-user_input = st.text_input("You: ", "")
+user_input = st.text_input("You:", "")
 
-# Generate response
 if user_input:
-    response = get_heart_health_response(user_input)
-    st.write(f"Chatbot: {response}")
+    # Create the prompt for the model
+    prompt = f"Explain the following: {user_input}"
+    
+    # Generate a response from the chatbot
+    bot_response = generate_response(prompt)
+    
+    # Display the chatbot's response
+    st.text_area("Chatbot:", bot_response, height=150)
